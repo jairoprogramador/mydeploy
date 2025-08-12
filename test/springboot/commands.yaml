@@ -1,0 +1,4 @@
+commands:
+  - name: "Maven: Test"
+    description: "we carry out the project tests"
+    cmd: "mvn clean test"
