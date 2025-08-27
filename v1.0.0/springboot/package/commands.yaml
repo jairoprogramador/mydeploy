@@ -1,0 +1,5 @@
+commands:
+  - name: "Azure: package"
+    description: "we carry out the project package"
+    cmd: "pwd"
+    dir: "."

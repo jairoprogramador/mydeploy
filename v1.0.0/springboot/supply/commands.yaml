@@ -1,0 +1,11 @@
+commands:
+  - name: "Azure: supply bootstrap"
+    description: "we carry out the project supply bootstrap"
+    #cmd: "terraform init && terraform plan -out plan.out && terraform apply 'plan.out'"
+    cmd: "pwd"
+    dir: "bootstrap"
+  - name: "Azure: supply"
+    description: "we carry out the project supply"
+    #cmd: "terraform init -backend-config='backend.tfvars' && terraform plan -out plan.out && terraform apply 'plan.out'"
+    cmd: "pwd"
+    dir: "."

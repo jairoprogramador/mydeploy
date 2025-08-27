@@ -1,0 +1,5 @@
+commands:
+  - name: "Azure: deploy"
+    description: "we carry out the project deploy"
+    cmd: "pwd"
+    dir: "."
