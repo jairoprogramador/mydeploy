@@ -1,3 +1,0 @@
-subscription_id = "id de la suscripcion"
-push_principal_ids = ["principal id"]
-pull_principal_ids = ["principal id"]

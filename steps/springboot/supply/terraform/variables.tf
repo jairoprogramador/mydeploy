@@ -5,9 +5,9 @@ variable "project" {
 }
 
 variable "environment" {
-  description = "Ambiente lógico (ej. platform, shared, cache)"
+  description = "Ambiente lógico (ej. dev, test, prod)"
   type        = string
-  default     = "cache"
+  default     = "dev"
 }
 
 variable "location" {
@@ -19,13 +19,43 @@ variable "location" {
 variable "resource_group_name" {
   description = "Nombre del Resource Group (si vacío, se crea uno)"
   type        = string
-  default     = "fastdeployrgbdc385b2"
+  default     = "fdrg"
+}
+
+variable "ad_display_name" {
+  description = "Nombre del Active Directory Group (si vacío, se crea uno)"
+  type        = string
+  default     = "fdad"
 }
 
 variable "container_registry_name" {
   description = "Nombre del Container Registry (si vacío, se crea uno)"
   type        = string
-  default     = "fastdeploycr"
+  default     = "fdcr"
+}
+
+variable "kubernetes_cluster_name" {
+  description = "Nombre del Kubernetes Cluster (si vacío, se crea uno)"
+  type        = string
+  default     = "fdkc"
+}
+
+variable "kubernetes_cluster_node_count" {
+  description = "Cantidad de nodos de Kubernetes (por defecto 1)"
+  type        = number
+  default     = 1
+}
+
+variable "kubernetes_cluster_vm_size" {
+  description = "Tamaño de la maquina virtual (por defecto standard_a2_v2)"
+  type        = string
+  default     = "standard_a2_v2"
+}
+
+variable "dns_api_aks" {
+  description = "Prefijo DNS del Kubernetes Cluster"
+  type        = string
+  default     = "fdkcdns"
 }
 
 variable "tags" {
@@ -34,7 +64,7 @@ variable "tags" {
   default     = {}
 }
 
-variable "push_principal_ids" {
+/* variable "push_principal_ids" {
   description = "Object IDs (Entra ID) con rol AcrPush en el ACR (pipelines, identidades)"
   type        = list(string)
 }
@@ -42,7 +72,7 @@ variable "push_principal_ids" {
 variable "pull_principal_ids" {
   description = "Object IDs con rol AcrPull en el ACR (AKS/VMSS/etc.)"
   type        = list(string)
-}
+} */
 
 variable "subscription_id" {
   description = "ID de la suscripción"

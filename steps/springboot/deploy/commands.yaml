@@ -1,5 +1,9 @@
 commands:
-  - name: "Azure: deploy"
+  - name: "Kubectl apply"
     description: "we carry out the project deploy"
-    cmd: "pwd"
+    cmd: "kubectl --context ${var.kubernetes_cluster_name} apply -f deployment.yaml"
+    dir: "."
+  - name: "Kubectl get pods"
+    description: "we get the pods for the project"
+    cmd: "kubectl --context ${var.kubernetes_cluster_name} get pods"
     dir: "."

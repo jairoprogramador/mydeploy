@@ -1,0 +1,4 @@
+subscription_id = "id de la suscripcion"
+resource_group_name = "nombre del recurso"
+container_registry_name = "nombre del ACR"
+project_name = "nombre del proyecto"

@@ -1,11 +1,58 @@
 commands:
-  - name: "Azure: supply bootstrap"
+
+  - name: "Verificar herramientas"
+    description: "Verificar que Terraform, Azure CLI y kubectl estén instalados"
+    cmd: "terraform --version && az --version && kubectl version --client && kubelogin --version"
+    workdir: "."
+    
+  - name: "Login Azure"
+    description: "Autenticarse en Azure CLI"
+    cmd: "az login --use-device-code || az login --identity || az login"
+    workdir: "."
+    
+  - name: "terraform apply bootstrap"
     description: "we carry out the project supply bootstrap"
     #cmd: "terraform init && terraform plan -out plan.out && terraform apply 'plan.out'"
     cmd: "pwd"
-    dir: "bootstrap"
-  - name: "Azure: supply"
+    workdir: "./terraform/bootstrap"
+    
+  - name: "terraform init"
     description: "we carry out the project supply"
-    #cmd: "terraform init -backend-config='backend.tfvars' && terraform plan -out plan.out && terraform apply 'plan.out'"
-    cmd: "pwd"
-    dir: "."
+    cmd: "terraform init"
+    #cmd: "terraform init -backend-config='backend.tfvars'"
+    #cmd: "pwd"
+    workdir: "./terraform"
+
+  - name: "terraform plan"
+    description: "we carry out the project supply"
+    cmd: "terraform plan -out plan.out"
+    #cmd: "pwd"
+    workdir: "./terraform"
+
+  - name: "terraform apply"
+    description: "we carry out the project supply"
+    cmd: "terraform apply 'plan.out'"
+    #cmd: "pwd"
+    workdir: "./terraform"
+    outputs:
+
+      - name: "resource_group_name"
+        description: "nombre del recurso"
+        regex: resource_group_name\s*=\s*"([^"]+)"
+
+      - name: "kubernetes_cluster_name"
+        description: "nombre del recurso"
+        regex: kubernetes_cluster_name\s*=\s*"([^"]+)"
+
+      - name: "container_registry_name"
+        description: "nombre del recurso"
+        regex: container_registry_name\s*=\s*"([^"]+)"
+
+      - name: "container_registry_login_server"
+        description: "nombre del recurso"
+        regex: container_registry_login_server\s*=\s*"([^"]+)"
+
+  - name: "Azure get credentials"
+    description: "we get the credentials aks for the project"
+    cmd: "az aks get-credentials -g ${var.resource_group_name} -n ${var.kubernetes_cluster_name}"
+    #cmd: "pwd"
