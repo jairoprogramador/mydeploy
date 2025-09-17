@@ -51,17 +51,12 @@ commands:
         description: "Devuelve el nombre del grupo de recursos creado en Azure"
         regex: azure_resource_group_name\s*=\s*"([^"]+)"
 
-      # creo no se usa
-      - name: "azure_kubernetes_cluster_name"
-        description: "Devuelve el nombre del cluster de Azure Kubernetes Service (AKS) creado"
-        regex: azure_kubernetes_cluster_name\s*=\s*"([^"]+)"
-
       - name: "azure_container_registry_name"
         description: "Devuelve el nombre del Azure Container Registry (ACR) creado para almacenar imágenes de contenedores"
         regex: azure_container_registry_name\s*=\s*"([^"]+)"
 
       - name: "azure_container_registry_login_server"
-        description: "Devuelve el dominio del servidor de inicio de sesión del Azure Container Registry"
+        description: "Devuelve el dominio del servidor de inicio de sesión del Azure Container Registry para usarlo en el deployment"
         regex: azure_container_registry_login_server\s*=\s*"([^"]+)"
 
       - name: "azure_subscription_id"
@@ -71,11 +66,3 @@ commands:
       - name: "azure_kubernetes_cluster_fqdn"
         description: "Devuelve el FQDN del cluster AKS para usar como base del ingress_host"
         regex: azure_kubernetes_cluster_fqdn\s*=\s*"([^"]+)"
-
-#  - name: "Azure get credentials"
-#    description: "we get the credentials aks for the project"
-#    cmd: "az aks get-credentials -g ${var.resource_group_name} -n ${var.kubernetes_cluster_name} --overwrite-existing"
-#
-#  - name: "kubelogin convert-kubeconfig"
-#    description: "we convert the credentials aks for the project"
-#    cmd: "kubelogin convert-kubeconfig -l azurecli"
