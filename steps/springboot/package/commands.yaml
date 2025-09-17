@@ -1,56 +1,46 @@
 commands:
-  - name: "verificar herramientas"
-    description: "Verificar que Maven, Docker y Azure CLI estén instalados"
-    cmd: "mvn --version && docker --version && az --version"
-    workdir: "."
+  - name: "Verificar maven"
+    description: "verifica que Maven esté instalado"
+    cmd: "mvn --version"
+    result: ^Apache Maven\s+\d+\.\d+\.\d+
+
+  - name: "Verificar docker"
+    description: "verifica que Docker esté instalado"
+    cmd: "docker --version"
+    result: ^Docker version\s+\d+\.\d+\.\d+
+  
+  - name: "Verificar Azure CLI"
+    description: "verifica que Azure CLI esté instalado"
+    cmd: "az --version"
+    result: '(?m)^azure-cli\s+\d+\.\d+\.\d+'
     
-  - name: "login Azure"
-    description: "Autenticarse en Azure CLI"
-    cmd: "az login --use-device-code || az login --identity || az login"
-    workdir: "."
+  - name: "Iniciar sesión"
+    description: "permite autenticarse en Azure CLI y obtener un token de acceso valido"
+    cmd: "az login"
 
-  - name: "configurar suscripción"
-    description: "Configurar la suscripción de trabajo si es necesario"
-    cmd: "az account set --subscription ${var.subscription_id}"
-    workdir: "."
-
-  - name: "verificar contexto Azure"
-    description: "Verificar suscripción y contexto actual"
-    cmd: "az account show --output table"
-    workdir: "."
+  - name: "Configurar suscripción"
+    description: "configura el contexto de suscripción para la sesión de Azure CLI"
+    cmd: "az account set --subscription ${var.azure_subscription_id}"
     
-  - name: "login ACR específico"
-    description: "Autenticarse específicamente en el Container Registry"
-    cmd: "az acr login --name ${var.container_registry_name}"
-    workdir: "."
+  - name: "Iniciar sesión en ACR"
+    description: "se autentica en Azure Container Registry reutilizando credenciales de sesión activa"
+    cmd: "az acr login --name ${var.azure_container_registry_name}"
 
-  - name: "terraform Init"
-    description: "Inicializar Terraform para package"
+  - name: "Iniciar terraform"
+    description: "prepara el entorno de trabajo de terraform, descargando los proveedores y configurando el backend de estado"
     cmd: "terraform init"
     workdir: "./terraform"
     
-  - name: "terraform Plan"
-    description: "Planificar el despliegue del package"
-    cmd: "terraform plan -var=\"project_source_path=${var.project_source_path}\" -var=\"project_version=${var.project_version}\" -var=\"project_name=${var.project_name}\" -var=\"dockerfile_path=${var.git_local_path}/package/docker/Dockerfile\" -var=\"resource_group_name=${var.resource_group_name}\" -var=\"container_registry_name=${var.container_registry_name}\" -var=\"subscription_id=${var.subscription_id}\" -var=\"environment=${var.environment}\" -out plan.out"
+  - name: "Planificar terraform"
+    description: "genera un plan de ejecución mostrando los cambios que se aplicarán en la infraestructura"
+    cmd: "terraform plan -var=\"app_project_source_path=${var.project_source_path}\" -var=\"app_project_version=${var.project_version}\" -var=\"app_project_name=${var.project_name}\" -var=\"docker_dockerfile_path=${var.deploy_repository_path}/package/docker/Dockerfile\" -var=\"azure_resource_group_name=${var.azure_resource_group_name}\" -var=\"azure_container_registry_name=${var.azure_container_registry_name}\" -out plan.out"
     workdir: "./terraform"
     
-  - name: "terraform Apply"
-    description: "Ejecutar el empaquetado y push al ACR"
+  - name: "Aplicar terraform"
+    description: "ejecuta los cambios definidos en el plan para aprovisionar o modificar la infraestructura"
     cmd: "terraform apply 'plan.out'"
     workdir: "./terraform"
-    
-  - name: "Escaneo de seguridad con Trivy"
-    description: "Escanear vulnerabilidades en la imagen Docker"
-    cmd: "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ${var.container_registry_login_server}/${var.project_name}:${var.project_version}"
-    workdir: "."
-    continue_on_error: true
-
-  - name: "Verificar imagen en ACR"
-    description: "Listar imágenes en el ACR para verificar el push"
-    cmd: "az acr repository show-tags --name ${var.container_registry_name} --repository ${var.project_name} --output table --orderby time_desc --top 3"
-    workdir: "."
-    
+   
   - name: "Limpiar imágenes locales"
-    description: "Limpiar imágenes Docker locales para ahorrar espacio"
+    description: "elimina imágenes Docker locales huérfanas para optimizar el uso de espacio en disco"
     cmd: "docker system prune -f"
-    workdir: "."

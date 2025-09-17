@@ -1,5 +1,10 @@
 commands:
-  - name: "Maven: Test"
-    description: "we carry out the project tests"
-    #cmd: "mvn clean test"
-    cmd: "pwd"
+  - name: "verificar maven"
+    description: "verifica que maven esté instalado"
+    cmd: "mvn --version"
+    result: ^Apache Maven\s+\d+\.\d+\.\d+
+
+  - name: "ejecutar pruebas unitarias"
+    description: "limpia la compilación previa, recompila el código y ejecuta los test unitarios"
+    cmd: "mvn clean test"
+    result: (?m)^.*BUILD SUCCESS.*

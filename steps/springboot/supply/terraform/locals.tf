@@ -1,18 +1,15 @@
 locals {
   common_tags = merge({
-    "project" : var.project.name,
-    "environment" : var.environment,
-    "managed-by" : "fastdeploy",
-    "layer" : "platform",
-    "component" : "acr-cache"
-  }, var.tags)
+    "project_name" : var.app_project_name,
+    "project_team": var.app_team_name,
+    "environment" : var.azure_environment,
+  }, var.azure_resource_tags)
 
   suffixes = {
-    rg = "${var.environment}${random_id.random_rg_name.hex}"
-    cr = "${var.environment}${random_id.random_cr_name.hex}"
-    kc = "${var.environment}${random_id.random_kc_name.hex}"
-    dns = "${var.environment}${random_id.random_dns_api_aks.hex}"
-    ad = "${var.environment}${random_id.random_ad_name.hex}"
+    resource_group = "${var.azure_environment}${random_id.resource_group_suffix.hex}"
+    container_registry = "${var.azure_environment}${random_id.container_registry_suffix.hex}"
+    kubernetes_cluster = "${var.azure_environment}${random_id.kubernetes_cluster_suffix.hex}"
+    dns_prefix = "${var.azure_environment}${random_id.dns_prefix_suffix.hex}"
+    active_directory_display_name = "${var.azure_environment}${random_id.active_directory_suffix.hex}"
   }
 }
-

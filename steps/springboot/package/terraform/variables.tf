@@ -1,53 +1,30 @@
-variable "project" {
-  default = {
-    name = "mainrepository"
-  }
-}
-
-variable "environment" {
-  description = "Ambiente lógico (ej. dev, test, prod)"
+variable "app_project_source_path" {
+  description = "Define la ruta del directorio que contiene el código fuente de la aplicación"
   type        = string
 }
 
-variable "project_source_path" {
-  description = "Ruta del código fuente del proyecto Spring Boot"
-  type        = string
-  default     = "."
-}
-
-variable "project_version" {
-  description = "Versión de despliegue para el tag de la imagen"
+variable "app_project_version" {
+  description = "Define la versión semántica que se asignará como tag a la imagen Docker generada"
   type        = string
   default     = "latest"
 }
 
-variable "dockerfile_path" {
-  description = "Ruta del Dockerfile"
+variable "app_project_name" {
+  description = "Define el nombre del proyecto que se utilizará para nombrar la imagen Docker"
   type        = string
 }
 
-variable "tags" {
-  description = "Etiquetas comunes"
-  type        = map(string)
-  default     = {}
-}
-
-variable "subscription_id" {
-  description = "ID de la suscripción"
+variable "docker_dockerfile_path" {
+  description = "Define la ruta del archivo Dockerfile utilizado para la construcción de la imagen"
   type        = string
 }
 
-variable "resource_group_name" {
-  description = "Nombre del Resource Group donde está el ACR"
+variable "azure_resource_group_name" {
+  description = "Define el nombre del Resource Group de Azure donde se encuentra alojado el Container Registry"
   type        = string
 }
 
-variable "container_registry_name" {
-  description = "Nombre del Container Registry"
-  type        = string
-}
-
-variable "project_name" {
-  description = "Nombre del proyecto para el tag de la imagen"
+variable "azure_container_registry_name" {
+  description = "Define el nombre del Azure Container Registry utilizado para almacenar las imágenes Docker"
   type        = string
 }

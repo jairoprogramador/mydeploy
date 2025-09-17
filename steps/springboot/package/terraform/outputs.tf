@@ -1,4 +1,4 @@
-output "image_name" {
-  description = "Nombre completo de la imagen creada"
-  value       = "${data.azurerm_container_registry.acr.login_server}/${var.project_name}:${var.project_version}"
+output "azure_image_uri_versioned" {
+  description = "Devuelve el URI de la imagen creada"
+  value       = local.container.image_uri_versioned
 }
