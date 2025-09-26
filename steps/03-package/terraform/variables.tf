@@ -28,3 +28,13 @@ variable "azure_container_registry_name" {
   description = "Define el nombre del Azure Container Registry utilizado para almacenar las imágenes Docker"
   type        = string
 }
+
+variable "app_environment" {
+  description = "Define el ambiente de la aplicación"
+  type        = string
+}
+
+variable "azure_subscription_id" {
+  description = "ID de la suscripción de Azure"
+  type        = string
+}

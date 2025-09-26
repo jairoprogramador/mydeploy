@@ -18,10 +18,10 @@ variable "app_team_name" {
   }
 }
 
-/*variable "subscription_id" {
-  description = "ID de la suscripción"
+variable "azure_subscription_id" {
+  description = "ID de la suscripción de Azure"
   type        = string
-}*/
+}
 
 /*VARIABLES OPCIONALES*/
 
@@ -56,25 +56,25 @@ variable "azure_location" {
 variable "azure_resource_group_name" {
   description = "Define el nombre base del grupo de recursos de Azure"
   type        = string
-  default     = "fastdeploy-rg"
+  default     = "fastdeployrg"
 }
 
 variable "azure_ad_display_name" {
   description = "Define el nombre base del grupo de Azure Active Directory para administradores de AKS"
   type        = string
-  default     = "fastdeploy-admins"
+  default     = "fastdeployadmins"
 }
 
 variable "azure_container_registry_name" {
   description = "Define el nombre base del Azure Container Registry (ACR)"
   type        = string
-  default     = "fastdeploy-acr"
+  default     = "fastdeployacr"
 }
 
 variable "azure_kubernetes_cluster_name" {
   description = "Define el nombre base del cluster de Azure Kubernetes Service (AKS)"
   type        = string
-  default     = "fastdeploy-aks"
+  default     = "fastdeployaks"
 }
 
 variable "azure_kubernetes_cluster_node_count" {
@@ -96,7 +96,7 @@ variable "azure_kubernetes_cluster_vm_size" {
 variable "azure_dns_prefix_aks" {
   description = "Define el prefijo DNS para el cluster de Azure Kubernetes Service"
   type        = string
-  default     = "fastdeploy-aks-dns"
+  default     = "fastdeployaksdns"
   validation {
     condition     = can(regex("^[a-z0-9-]+$", var.azure_dns_prefix_aks))
     error_message = "El prefijo DNS debe contener solo letras minúsculas, números y guiones."

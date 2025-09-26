@@ -38,3 +38,17 @@ commands:
   - name: "verificar_ingress"
     description: "Se verifica la configuración del ingress y su estado"
     cmd: "kubectl get ingress --namespace ${var.kubernetes_namespace} -l app=${var.project_name}"
+    workdir: "./k8s"
+    templates:
+      path:
+        - "./"
+    outputs:
+      - name: "azure_resource_group_name"
+        description: "Devuelve el nombre del grupo de recursos creado en Azure"
+        probe: azure_resource_group_name\s*=\s*"([^"]+)"
+
+      - name: "azure_container_registry_name"
+        description: "Devuelve el nombre del Azure Container Registry (ACR) creado para almacenar imágenes de contenedores"
+        probe: azure_container_registry_name\s*=\s*"([^"]+)"
+
+         finalmente, conectar todo en el main.go del cmd.

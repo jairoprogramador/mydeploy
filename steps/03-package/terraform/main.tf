@@ -54,6 +54,7 @@ resource "null_resource" "scan_trivy_security" {
 }
 
 resource "null_resource" "push_acr_image" {
+  count      = var.app_environment != "local" ? 1 : 0
   depends_on = [null_resource.scan_trivy_security]
   
   provisioner "local-exec" {

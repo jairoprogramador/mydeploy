@@ -8,7 +8,7 @@
 
 - name: "k8s_deployment_name"
   description: "nombre del deployment de Kubernetes"
-  value: ${var.k8s_project_instance}-${var.project_type}
+  value: ${var.k8s_project_instance}-${var.project_category}
 
 - name: "k8s_ingress_host"
   description: "host domain for the ingress (FQDN of the AKS cluster)"

@@ -92,39 +92,6 @@ resource "azurerm_kubernetes_cluster" "main" {
   tags = local.common_tags
 }
 
-resource "azurerm_policy_definition" "aks_deny_registry_secrets_policy" {
-  name         = "denyAksRegistrySecrets"
-  policy_type  = "Custom"
-  mode         = "Microsoft.Kubernetes.Data"
-  display_name = "Denega secreto dockerconfigjson en el cluster de Kubernetes"
-  description  = "Impide crear secreto de tipo kubernetes.io/dockerconfigjson (imagePullSecrets)."
-
-  metadata = jsonencode({
-    category = "kubernetes",
-    author = "fastdeploy"
-  })
-
-  policy_rule = jsonencode({
-    if = {
-      field = "type"
-      equals = "Microsoft.ContainerService/managedClusters"
-    }
-    then = {
-      effect = "deny"
-      details = {
-        type = "Microsoft.ContainerService/managedClusters"
-      }
-    }
-  })
-
-}
-
-resource "azurerm_resource_policy_assignment" "aks_deny_registry_secrets_permissions" {
-  name                 = "aks-deny-registry-secrets"
-  resource_id          = azurerm_kubernetes_cluster.main.id
-  policy_definition_id = azurerm_policy_definition.aks_deny_registry_secrets_policy.id
-}
-
 resource "azurerm_role_assignment" "acr_push_permissions" {
   scope                = azurerm_container_registry.main.id
   role_definition_name = "AcrPush"
