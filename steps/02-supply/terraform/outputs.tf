@@ -1,8 +1,3 @@
-output "azure_subscription_id" {
-  description = "Devuelve el ID de la suscripción de Azure utilizada para el despliegue"
-  value = data.azurerm_client_config.current.subscription_id
-}
-
 output "azure_resource_group_name" {
   description = "Devuelve el nombre del grupo de recursos creado en Azure"
   value       = azurerm_resource_group.main.name

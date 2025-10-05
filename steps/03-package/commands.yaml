@@ -3,6 +3,7 @@
    cmd: "mvn --version"
    outputs: 
      - probe: ^Apache Maven\s+\d+\.\d+\.\d+
+     
  - name: "Verificar docker"
    description: "verifica que Docker esté instalado"
    cmd: "docker --version"
@@ -26,6 +27,7 @@
      - name: "azure_subscription_id"
        description: "ID de la suscripción de Azure"
        probe: "(.+)"
+
  - name: "Configurar suscripción"
    description: "configura el contexto de suscripción para la sesión de Azure CLI"
    cmd: "az account set --subscription ${var.azure_subscription_id}"
@@ -33,6 +35,7 @@
  - name: "Iniciar sesión en ACR"
    description: "se autentica en Azure Container Registry reutilizando credenciales de sesión activa"
    cmd: "az acr login --name ${var.azure_container_registry_name}"
+
  - name: "Iniciar terraform"
    description: "prepara el entorno de trabajo de terraform, descargando los proveedores y configurando el backend de estado"
    cmd: "terraform init"
@@ -40,11 +43,10 @@
    
  - name: "Planificar terraform"
    description: "genera un plan de ejecución mostrando los cambios que se aplicarán en la infraestructura"
-   cmd: "terraform plan -var-file=\"terraform.tfvars\" -out plan.out"
+   cmd: "terraform plan -var-file=\"fastdeploy.tfvars\" -out plan.out"
    workdir: "./terraform"
    templates:
-     path:
-       - "terraform.tfvars"
+    - "fastdeploy.tfvars"
    
  - name: "Aplicar terraform"
    description: "ejecuta los cambios definidos en el plan para aprovisionar o modificar la infraestructura"

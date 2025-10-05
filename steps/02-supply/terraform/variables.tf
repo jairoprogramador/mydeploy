@@ -1,4 +1,13 @@
 /*VARIABLES OBLIGATORIAS*/
+variable "azure_subscription_id" {
+  description = "ID de la suscripción de Azure"
+  type        = string
+}
+
+variable "app_environment" {
+  description = "Define el entorno de despliegue (sand, stag, prod)"
+  type        = string
+}
 
 variable "app_project_name" {
   description = "Define el nombre del proyecto"
@@ -18,11 +27,6 @@ variable "app_team_name" {
   }
 }
 
-variable "azure_subscription_id" {
-  description = "ID de la suscripción de Azure"
-  type        = string
-}
-
 /*VARIABLES OPCIONALES*/
 
 variable "azure_resource_tags" {
@@ -35,12 +39,6 @@ variable "azure_resource_tags" {
     create_by    = "fastdeploy"
     lifecycle    = "ephemeral"
   }
-}
-
-variable "azure_environment" {
-  description = "Define el entorno de despliegue (development, staging, production)"
-  type        = string
-  default     = "development"
 }
 
 variable "azure_location" {

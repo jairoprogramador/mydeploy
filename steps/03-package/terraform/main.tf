@@ -7,6 +7,7 @@ resource "null_resource" "build_maven_package" {
   }
 
   triggers = {
+    dom_file_hash = filemd5("${var.app_project_source_path}/.fastdeploy/dom.yaml")
     pom_file_hash = filemd5("${var.app_project_source_path}/pom.xml")
     source_code_hash = sha256(join("", [
       for file in fileset("${var.app_project_source_path}/src", "**/*.java") :
@@ -23,6 +24,7 @@ resource "null_resource" "build_docker_image" {
       docker build \
         -t ${local.container.image_uri_versioned} \
         -t ${local.container.image_uri_latest} \
+        -t ${local.container.image_uri_local} \
         -f ${var.docker_dockerfile_path} ${var.app_project_source_path}
     EOT
   }
@@ -40,21 +42,20 @@ resource "null_resource" "scan_trivy_security" {
 
   provisioner "local-exec" {
     command = <<-EOT
-      docker run \
-      --rm aquasec/trivy \
-      image --exit-code 1 --severity HIGH,CRITICAL ${local.container.image_uri_versioned}
+      docker run --rm \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      aquasec/trivy \
+      image --exit-code 1 --severity HIGH,CRITICAL ${local.container.image_uri_local}
     EOT
   }
 
   triggers = {
-    image_id = null_resource.build_docker_image[0].id
+    image_id = null_resource.build_docker_image.id
     image_tag = var.app_project_version
   }
-
 }
 
 resource "null_resource" "push_acr_image" {
-  count      = var.app_environment != "local" ? 1 : 0
   depends_on = [null_resource.scan_trivy_security]
   
   provisioner "local-exec" {
@@ -66,7 +67,7 @@ resource "null_resource" "push_acr_image" {
   }
 
   triggers = {
-    scan_result = null_resource.scan_trivy_security[0].id
+    scan_result = null_resource.scan_trivy_security.id
     image_tag = var.app_project_version
   }
 

@@ -2,11 +2,11 @@
   description: "verifica que maven esté instalado"
   cmd: "mvn --version"
   outputs: 
-    - probe: ^Apache Maven\s+\d+\.\d+\.\d+
+    - probe: (?m)^Apache Maven\s+\d+\.\d+\.\d+
 
 - name: "ejecutar pruebas unitarias"
   description: "limpia la compilación previa, recompila el código y ejecuta los test unitarios"
   cmd: "mvn clean test"
-  #cmd: "echo 'holitas'"
+  #cmd: "echo 'holitas BUILD SUCCESS'"
   outputs: 
     - probe: (?m)^.*BUILD SUCCESS.*

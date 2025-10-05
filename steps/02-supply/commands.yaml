@@ -29,10 +29,10 @@
 - name: "Obtener ID de suscripción"
   description: "Obtiene el ID de la suscripción actual de Azure"
   cmd: "az account show --query id --output tsv"
-  variables:
+  outputs:
     - name: "azure_subscription_id"
       description: "ID de la suscripción de Azure"
-      regex: "(.+)"
+      probe: "(.+)"
   
 #- name: "terraform apply bootstrap"
   #description: "we carry out the project supply bootstrap"
@@ -48,11 +48,10 @@
 
 - name: "Planificar terraform"
   description: "genera un plan de ejecución mostrando los cambios que se aplicarán en la infraestructura"
-  cmd: "terraform plan -var-file=\"terraform.tfvars\" -out plan.out"
+  cmd: "terraform plan -var-file=\"fastdeploy.tfvars\" -out plan.out"
   workdir: "./terraform"
   templates:
-    path:
-      - "terraform.tfvars"
+    - "fastdeploy.tfvars"
 
 - name: "Aplicar terraform"
   description: "ejecuta los cambios definidos en el plan para aprovisionar o modificar la infraestructura"
@@ -71,10 +70,6 @@
     - name: "azure_container_registry_login_server"
       description: "Devuelve el dominio del servidor de inicio de sesión del Azure Container Registry para usarlo en el deployment"
       probe: azure_container_registry_login_server\s*=\s*"([^"]+)"
-
-    - name: "azure_subscription_id"
-      description: "Devuelve el identificador único de la suscripción de Azure utilizado"
-      probe: azure_subscription_id\s*=\s*([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})"
 
     - name: "azure_kubernetes_cluster_fqdn"
       description: "Devuelve el FQDN del cluster AKS para usar como base del ingress_host"

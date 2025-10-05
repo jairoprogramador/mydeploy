@@ -4,20 +4,20 @@ metadata:
   name: ${var.k8s_deployment_name}-service
   namespace: ${var.k8s_namespace}
   labels:
-    app.kubernetes.io/name: ${var.project_name12}
+    app.kubernetes.io/name: ${var.project_name}
     app.kubernetes.io/instance: ${var.k8s_project_instance}
     app.kubernetes.io/version: ${var.project_version}
-    app.kubernetes.io/part-of: ${var.project_organization}
-    app.kubernetes.io/managed-by: ${var.KeyToolName}
+    app.kubernetes.io/part-of: ${var.product_organization}
+    app.kubernetes.io/managed-by: ${var.tool_name}
     environment: ${var.environment}
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
   - port: ${var.k8s_service_port}
-    targetPort: ${var.app_port}
+    targetPort: ${var.container_port}
     protocol: TCP
     name: http
   selector:
-    app.kubernetes.io/name: ${var.project_name12}
-    app.kubernetes.io/part-of: ${var.project_organization}
+    app.kubernetes.io/name: ${var.project_name}
+    app.kubernetes.io/part-of: ${var.product_organization}
     environment: ${var.environment}
