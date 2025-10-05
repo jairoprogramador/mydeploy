@@ -19,6 +19,11 @@ variable "app_project_name" {
   type        = string
 }
 
+variable "app_project_revision" {
+  description = "Define el codigo revision del proyecto que se utilizará para nombrar la imagen Docker"
+  type        = string
+}
+
 variable "docker_dockerfile_path" {
   description = "Define la ruta del archivo Dockerfile utilizado para la construcción de la imagen"
   type        = string

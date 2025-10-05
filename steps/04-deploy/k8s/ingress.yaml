@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: ${var.project_name}
     app.kubernetes.io/instance: ${var.k8s_project_instance}
-    app.kubernetes.io/version: ${var.project_version}
+    app.kubernetes.io/version: "${var.project_revision}"
     app.kubernetes.io/part-of: ${var.product_organization}
     app.kubernetes.io/managed-by: ${var.tool_name}
     environment: ${var.environment}
