@@ -1,68 +1,55 @@
-# mydeploy
-Mis archivos de despligue de fastDeploy
+# Tu Infraestructura como Plantilla, Potenciada por fastDeploy
 
-## Estilo para escribir commands.ymal
+**Convierte tus despliegues en un proceso predecible, repetible y agnóstico a la tecnología. `mydeploy` no es solo un repositorio; es el blueprint para la excelencia en DevOps, diseñado para ser un motor de referencia para `fastDeploy`.**
 
-# name
+---
 
-Siempre debe ser un verbo en infinitivo (no en primera persona, ni en gerundio).
+## ¿Qué es `mydeploy`?
 
-Objetivo: que suene como una acción clara y neutral.
+`mydeploy` es una plantilla de despliegue que estandariza y automatiza el proceso de llevar un microservicio Java a un cluster de Azure Kubernetes Service (AKS). Pero su verdadero poder reside en su diseño: una arquitectura de "infraestructura como plantilla" que te permite abstraer la complejidad y centrarte en lo que realmente importa: el código.
 
-Ejemplos correctos:
+Este repositorio es la implementación de referencia para [fastDeploy](https://github.com/jairoprogramador/fastdeploy), una herramienta CLI que consume plantillas como esta para orquestar despliegues complejos con comandos simples e intuitivos.
 
-"verificar Maven"
+## La Filosofía: Infraestructura como Plantilla
 
-"ejecutar pruebas unitarias"
+Olvídate de los scripts frágiles y los `READMEs` de 100 pasos. La filosofía detrás de `mydeploy` es simple pero poderosa:
 
-"generar paquete JAR"
+> **Define tu proceso de despliegue una vez. Ejecútalo miles de veces, en cualquier entorno, sin fricción.**
 
-"instalar dependencias en el repositorio local"
+Centralizamos toda la lógica de despliegue —desde la verificación de herramientas hasta el aprovisionamiento de infraestructura y el despliegue final— en una estructura de pasos (`steps`) y entornos (`environments`) clara y reutilizable.
 
-# description
+## ✨ Características que te Empoderan
 
-Siempre redactada en tercera persona, impersonal, explicando qué hace el comando.
+*   **🚀 Despliegues Agnósticos a la Tecnología:** Aunque este ejemplo se centra en Java y AKS, la estructura de `steps` y `commands.yaml` es universal. ¿Necesitas desplegar Node.js en AWS? ¿O un servicio de Python en Google Cloud? Simplemente adapta los comandos. El framework ya está aquí.
+*   **⚙️ Orquestación por Pasos (Steps):** El directorio `steps` divide el despliegue en fases lógicas y numeradas (`01-test`, `02-supply`, etc.). Cada paso es un subdirectorio autocontenido, lo que facilita la comprensión, el mantenimiento y la depuración del flujo.
+*   **📄 Comandos Declarativos (`commands.yaml`):** Dentro de cada paso, el archivo `commands.yaml` define las acciones a ejecutar. Cada comando es un objeto con:
+    *   `name`: Un verbo en infinitivo que describe la acción.
+    *   `description`: Una explicación clara de lo que hace el comando.
+    *   `cmd`: El comando de shell a ejecutar.
+    *   `workdir`: (Opcional) El directorio de trabajo para la ejecución.
+*   **✅ Validación y Captura de Salidas (`outputs`):** La sección `outputs` es donde la magia ocurre.
+    *   **Validación de Éxito (`probe`):** Define una expresión regular para validar que la salida de un comando es la esperada. Si no coincide, el despliegue falla. ¡Adiós a los falsos positivos!
+    *   **Creación Dinámica de Variables:** ¿Necesitas el ID de un recurso creado por Terraform o el nombre de un servidor? Captura valores de la salida de un comando usando grupos en tu expresión regular `probe` y asígnalos a una nueva variable. Estas variables estarán disponibles en los pasos posteriores.
+*   **🌐 Gestión de Entornos (`environments.yaml`):** Define tus entornos (`sandbox`, `staging`, `production`) en un único archivo. `fastDeploy` utilizará esta configuración para dirigir los despliegues y aplicar las variables correctas.
+*   **🔒 Variables por Entorno (`variables/`):** Gestiona tus configuraciones específicas de cada entorno de forma segura y organizada. El directorio `variables` contiene subdirectorios por cada entorno, permitiéndote mantener, por ejemplo, `deploy.yaml` con valores diferentes para `prod` y `sand`.
+*   **📝 Plantillas Dinámicas (`templates`):** La clave para la reutilización. Define archivos (`Dockerfile`, `deployment.yaml`, etc.) con placeholders para tus variables. La directiva `templates` en un comando le indica a `fastDeploy` que reemplace las variables en esos archivos justo antes de ejecutar el comando, adaptándolos al entorno y al contexto del despliegle.
 
-Evitar "yo" o "tú" (primera/segunda persona).
+## ¿Cómo Funciona con `fastDeploy`?
 
-Usar frases cortas, técnicas y precisas.
+`fastDeploy` es el motor que da vida a esta plantilla. Cuando un desarrollador ejecuta `fd deploy sand`:
 
-Ejemplos correctos:
+1.  **Clona `mydeploy`:** `fastDeploy` clona este repositorio en segundo plano.
+2.  **Lee la Configuración:** Analiza `environments.yaml`, los `steps` y los `variables` correspondientes al entorno `sand`.
+3.  **Ejecuta los Pasos en Orden:**
+    *   Comienza con `01-test`, ejecutando los comandos de `commands.yaml`.
+    *   Valida las salidas con `probe`.
+    *   Captura nuevas variables desde los `outputs`.
+    *   Procesa las plantillas (`templates`) si se especifican.
+    *   Continúa con `02-supply`, `03-package`, y así sucesivamente, pasando las variables generadas entre pasos.
+4.  **Reporta el Resultado:** Informa al usuario si el despliegue fue un éxito o si falló en algún punto, proporcionando contexto claro.
 
-"verifica que Maven esté instalado"
+## Empieza a Construir tu Propia Plantilla
 
-"elimina artefactos previos, recompila el proyecto y ejecuta las pruebas unitarias"
+Usa `mydeploy` como punto de partida. Fórkalo, adáptalo a tus tecnologías y empieza a construir una cultura de despliegues estandarizados en tu organización.
 
-"empaqueta el código compilado en un archivo JAR"
-
-"instala el paquete en el repositorio local de Maven"
-
-# Terraform outputs description
-
-## Estructura de la descripción
-
-Verbo en tercera persona, impersonal: Proporciona, Devuelve, Indica, Especifica.
-
-Objeto principal: el recurso o valor que se expone.
-
-Contexto opcional: el servicio o finalidad del valor.
-
-👉 Formato recomendado:
-
-    <Verbo> <qué valor expone> <contexto opcional>
-
-Ejemplo:
-
-"Proporciona el nombre del grupo de recursos de Azure."
-
-"Devuelve la URL del servidor de inicio de sesión del Azure Container Registry."
-
-## Verbos recomendados
-
-Proporciona → para valores generales (ej. nombres).
-
-Devuelve → para endpoints, URLs, identificadores.
-
-Indica → para estados o banderas booleanas.
-
-Especifica → cuando se describe un valor exacto de configuración.
+**Con `mydeploy` y `fastDeploy`, la infraestructura deja de ser un cuello de botella y se convierte en una ventaja competitiva.**
