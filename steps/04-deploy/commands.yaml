@@ -1,8 +1,15 @@
+- name: "Iniciar sesion con Azure CLI"
+  description: "Configurar inicio de sesion"
+  cmd: "az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID"
 
-- name: "Iniciar sesión"
-  description: "Permite autenticarse en Azure CLI y obtener un token de acceso valido"
-  cmd: "az login"
-  
+- name: "Configurar credenciales de aks"
+  description: "Configurar inicio de sesion"
+  cmd: "az aks get-credentials --resource-group ${var.azure_resource_group_name} --name ${var.azure_kubernetes_cluster_name} --overwrite-existing"
+
+- name: "Configura credencial con kubelogin"
+  description: "Configurar inicio de sesion"
+  cmd: "kubelogin convert-kubeconfig -l azurecli"
+
 - name: "Crear namespace de Kubernetes"
   description: "se crea el namespace de Kubernetes si no existe"
   cmd: "kubectl create namespace ${var.k8s_namespace} --dry-run=client -o yaml | kubectl apply -f -"

@@ -17,3 +17,8 @@ output "azure_kubernetes_cluster_fqdn" {
   description = "Devuelve el nombre de dominio completamente calificado (FQDN) del cluster AKS"
   value       = azurerm_kubernetes_cluster.main.fqdn
 }
+
+output "azure_kubernetes_cluster_name" {
+  description = "Devuelve el nombre del cluster AKS"
+  value       = azurerm_kubernetes_cluster.main.name
+}

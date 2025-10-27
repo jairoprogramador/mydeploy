@@ -1,58 +1,23 @@
- - name: "Verificar maven"
-   description: "verifica que Maven esté instalado"
-   cmd: "mvn --version"
-   outputs: 
-     - probe: ^Apache Maven\s+\d+\.\d+\.\d+
-     
- - name: "Verificar docker"
-   description: "verifica que Docker esté instalado"
-   cmd: "docker --version"
-   outputs: 
-     - probe: ^Docker version\s+\d+\.\d+\.\d+
- 
- - name: "Verificar Azure CLI"
-   description: "verifica que Azure CLI esté instalado"
-   cmd: "az --version"
-   outputs: 
-     - probe: '(?m)^azure-cli\s+\d+\.\d+\.\d+'
+- name: "Construir imagen Docker"
+  description: "Construye la imagen Docker con múltiples etiquetas: versión, latest y revisión."
+  cmd: "docker build -t ${var.azure_container_registry_login_server}/${var.project_name}:${var.project_revision} -t ${var.azure_container_registry_login_server}/${var.project_name}:latest -t ${var.project_name}:${var.project_revision} -f ${var.step_workdir}/docker/Dockerfile ${var.project_workdir}"
    
- - name: "Iniciar sesión"
-   description: "permite autenticarse en Azure CLI y obtener un token de acceso valido"
-   cmd: "az login"
- 
- - name: "Obtener ID de suscripción"
-   description: "Obtiene el ID de la suscripción actual de Azure"
-   cmd: "az account show --query id --output tsv"
-   outputs:
-     - name: "azure_subscription_id"
-       description: "ID de la suscripción de Azure"
-       probe: "(.+)"
+- name: "Iniciar sesion con Azure CLI"
+  description: "Configurar inicio de sesion"
+  cmd: "az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID"
 
- - name: "Configurar suscripción"
-   description: "configura el contexto de suscripción para la sesión de Azure CLI"
-   cmd: "az account set --subscription ${var.azure_subscription_id}"
-   
- - name: "Iniciar sesión en ACR"
-   description: "se autentica en Azure Container Registry reutilizando credenciales de sesión activa"
-   cmd: "az acr login --name ${var.azure_container_registry_name}"
+- name: "Iniciar sesión en ACR"
+  description: "Autentica en Azure Container Registry reutilizando credenciales de sesión activa"
+  cmd: "az acr login --name ${var.azure_container_registry_name}"
 
- - name: "Iniciar terraform"
-   description: "prepara el entorno de trabajo de terraform, descargando los proveedores y configurando el backend de estado"
-   cmd: "terraform init"
-   workdir: "./terraform"
-   
- - name: "Planificar terraform"
-   description: "genera un plan de ejecución mostrando los cambios que se aplicarán en la infraestructura"
-   cmd: "terraform plan -var-file=\"fastdeploy.tfvars\" -out plan.out"
-   workdir: "./terraform"
-   templates:
-    - "fastdeploy.tfvars"
-   
- - name: "Aplicar terraform"
-   description: "ejecuta los cambios definidos en el plan para aprovisionar o modificar la infraestructura"
-   cmd: "terraform apply 'plan.out'"
-   workdir: "./terraform"
-  
- - name: "Limpiar imágenes locales"
-   description: "elimina imágenes Docker locales huérfanas para optimizar el uso de espacio en disco"
-   cmd: "docker system prune -f"
+- name: "Subir imagen a ACR (por versión)"
+  description: "Sube la imagen con la etiqueta de la versión del proyecto a Azure Container Registry."
+  cmd: "docker push ${var.azure_container_registry_login_server}/${var.project_name}:${var.project_revision}"
+
+- name: "Subir imagen a ACR (latest)"
+  description: "Sube la imagen con la etiqueta 'latest' a Azure Container Registry."
+  cmd: "docker push ${var.azure_container_registry_login_server}/${var.project_name}:latest"
+
+- name: "Limpiar imágenes locales"
+  description: "elimina imágenes Docker locales huérfanas para optimizar el uso de espacio en disco"
+  cmd: "docker system prune -f"

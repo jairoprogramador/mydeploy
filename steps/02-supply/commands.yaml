@@ -1,49 +1,6 @@
-- name: "Verificar terraform"
-  description: "verifica que terraform esté instalado"
-  cmd: "terraform --version"
-  outputs: 
-    - probe: '(?m)^Terraform\s+v\d+\.\d+\.\d+$'
-
-- name: "Verificar kubectl"
-  description: "verifica que kubectl esté instalado"
-  cmd: "kubectl version --client"
-  outputs: 
-    - probe: '(?m)^Client Version:\s+v\d+\.\d+\.\d+$'
-
-- name: "Verificar kubelogin"
-  description: "verifica que kubelogin esté instalado"
-  cmd: "kubelogin --version"
-  outputs: 
-    - probe: '(?m)^kubelogin version'
-
-- name: "Verificar Azure CLI"
-  description: "verifica que Azure CLI esté instalado"
-  cmd: "az --version"
-  outputs: 
-    - probe: '(?m)^azure-cli\s+\d+\.\d+\.\d+'
-  
-- name: "Iniciar sesión"
-  description: "Permite autenticarse en Azure CLI y obtener un token de acceso valido"
-  cmd: "az login"
-
-- name: "Obtener ID de suscripción"
-  description: "Obtiene el ID de la suscripción actual de Azure"
-  cmd: "az account show --query id --output tsv"
-  outputs:
-    - name: "azure_subscription_id"
-      description: "ID de la suscripción de Azure"
-      probe: "(.+)"
-  
-#- name: "terraform apply bootstrap"
-  #description: "we carry out the project supply bootstrap"
-  #cmd: "terraform init && terraform plan -out plan.out && terraform apply 'plan.out'"
-  #cmd: "pwd"
-  #workdir: "./terraform/bootstrap"
-  
 - name: "Iniciar terraform"
   description: "prepara el entorno de trabajo de terraform, descargando los proveedores y configurando el backend de estado"
   cmd: "terraform init"
-  #cmd: "terraform init -backend-config='backend.tfvars'"
   workdir: "./terraform"
 
 - name: "Planificar terraform"
@@ -74,3 +31,20 @@
     - name: "azure_kubernetes_cluster_fqdn"
       description: "Devuelve el FQDN del cluster AKS para usar como base del ingress_host"
       probe: azure_kubernetes_cluster_fqdn\s*=\s*"([^"]+)"
+
+    - name: "azure_kubernetes_cluster_name"
+      description: "Devuelve el FQDN del cluster AKS para usar como base del ingress_host"
+      probe: azure_kubernetes_cluster_name\s*=\s*"([^"]+)"
+
+# - name: "Iniciar sesion con az"
+#   description: "Configurar inicio de sesion"
+#   cmd: "az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID"
+
+# - name: "Configurar credenciales de aks"
+#   description: "Configurar inicio de sesion"
+#   cmd: "az aks get-credentials --resource-group ${var.azure_resource_group_name} --name ${var.azure_kubernetes_cluster_name} --overwrite-existing"
+
+# - name: "Configura credencial con kubelogin"
+#   description: "Configurar inicio de sesion"
+#   cmd: "kubelogin convert-kubeconfig -l azurecli"
+  

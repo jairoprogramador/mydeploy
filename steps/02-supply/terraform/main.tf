@@ -1,8 +1,3 @@
-#import {
-#  to = azurerm_resource_group.this
-#  id = "/subscriptions/${var.subscription_id}/resourceGroups/${var.resource_group_name}"
-#}
-
 resource "random_id" "resource_group_suffix" {
   keepers = {
     value = var.azure_resource_group_name
@@ -40,7 +35,6 @@ resource "random_id" "active_directory_suffix" {
 
 resource "azurerm_resource_group" "main" {
   name     = "${var.azure_resource_group_name}${local.suffixes.resource_group}"
-  #name     = var.resource_group_name
   location = var.azure_location
   tags     = local.common_tags
 }
@@ -108,36 +102,4 @@ resource "azurerm_role_assignment" "aks_acr_pull_permissions" {
   principal_id                     = azurerm_kubernetes_cluster.main.kubelet_identity[0].object_id
   role_definition_name             = "AcrPull"
   scope                            = azurerm_container_registry.main.id
-  #skip_service_principal_aad_check = true
-}
-
-resource "null_resource" "configure_aks_credentials" {
-  depends_on = [azurerm_kubernetes_cluster.main, azurerm_resource_group.main]
-
-  provisioner "local-exec" {
-    command = <<-EOT
-      az aks get-credentials \
-        --resource-group ${azurerm_resource_group.main.name} \
-        --name ${azurerm_kubernetes_cluster.main.name} \
-        --overwrite-existing
-    EOT
-  }
-
-  triggers = {
-    cluster_name = azurerm_kubernetes_cluster.main.name
-    resource_group = azurerm_resource_group.main.name
-  }
-}
-
-resource "null_resource" "configure_kubelogin" {
-  depends_on = [null_resource.configure_aks_credentials]
-
-  provisioner "local-exec" {
-    command = "kubelogin convert-kubeconfig -l azurecli"
-  }
-
-  triggers = {
-    cluster_name = azurerm_kubernetes_cluster.main.name
-    resource_group = azurerm_resource_group.main.name
-  }
 }

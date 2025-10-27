@@ -1,9 +1,4 @@
 /*VARIABLES OBLIGATORIAS*/
-variable "azure_subscription_id" {
-  description = "ID de la suscripción de Azure"
-  type        = string
-}
-
 variable "app_environment" {
   description = "Define el entorno de despliegue (sand, stag, prod)"
   type        = string
