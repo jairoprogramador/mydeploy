@@ -35,16 +35,4 @@
     - name: "azure_kubernetes_cluster_name"
       description: "Devuelve el FQDN del cluster AKS para usar como base del ingress_host"
       probe: azure_kubernetes_cluster_name\s*=\s*"([^"]+)"
-
-# - name: "Iniciar sesion con az"
-#   description: "Configurar inicio de sesion"
-#   cmd: "az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID"
-
-# - name: "Configurar credenciales de aks"
-#   description: "Configurar inicio de sesion"
-#   cmd: "az aks get-credentials --resource-group ${var.azure_resource_group_name} --name ${var.azure_kubernetes_cluster_name} --overwrite-existing"
-
-# - name: "Configura credencial con kubelogin"
-#   description: "Configurar inicio de sesion"
-#   cmd: "kubelogin convert-kubeconfig -l azurecli"
   
