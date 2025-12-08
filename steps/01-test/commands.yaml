@@ -1,5 +1,5 @@
-- name: "ejecutar pruebas unitarias"
-  description: "limpia la compilación previa, recompila el código y ejecuta los test unitarios"
+- name: "run unit tests"
+  description: "clean the previous build, compile the code and run the unit tests"
   cmd: "mvn clean test"
   outputs: 
     - probe: (?m)^.*BUILD SUCCESS.*

@@ -1,38 +1,58 @@
-- name: "Iniciar terraform"
-  description: "prepara el entorno de trabajo de terraform, descargando los proveedores y configurando el backend de estado"
+- name: "Init terraform shared"
+  description: "prepare the terraform working for the shared resources, downloading the providers and configuring the backend state"
   cmd: "terraform init"
-  workdir: "./terraform"
+  workdir: "./terraform/shared"
 
-- name: "Planificar terraform"
-  description: "genera un plan de ejecución mostrando los cambios que se aplicarán en la infraestructura"
-  cmd: "terraform plan -var-file=\"fastdeploy.tfvars\" -out plan.out"
-  workdir: "./terraform"
-  templates:
-    - "fastdeploy.tfvars"
+- name: "Plan terraform shared"
+  description: "generate a execution plan showing the changes that will be applied to the shared resources"
+  cmd: "terraform plan -out plan.out"
+  workdir: "./terraform/shared"
 
-- name: "Aplicar terraform"
-  description: "ejecuta los cambios definidos en el plan para aprovisionar o modificar la infraestructura"
+- name: "Apply terraform shared"
+  description: "execute the changes defined in the plan to provision or modify the shared resources"
   cmd: "terraform apply 'plan.out'"
-  workdir: "./terraform"
+  workdir: "./terraform/shared"
 
   outputs:
-    - name: "azure_resource_group_name"
-      description: "Devuelve el nombre del grupo de recursos creado en Azure"
-      probe: azure_resource_group_name\s*=\s*"([^"]+)"
+    - name: "azure_container_registry_rg"
+      description: "Return the name of the Resource Group for the Azure Container Registry (ACR)"
+      probe: azure_container_registry_rg\s*=\s*"([^"]+)"
 
     - name: "azure_container_registry_name"
-      description: "Devuelve el nombre del Azure Container Registry (ACR) creado para almacenar imágenes de contenedores"
+      description: "Return the name of the Azure Container Registry (ACR)"
       probe: azure_container_registry_name\s*=\s*"([^"]+)"
 
     - name: "azure_container_registry_login_server"
-      description: "Devuelve el dominio del servidor de inicio de sesión del Azure Container Registry para usarlo en el deployment"
+      description: "Return the domain of the login server of the Azure Container Registry"
       probe: azure_container_registry_login_server\s*=\s*"([^"]+)"
 
+- name: "Init terraform"
+  description: "prepare the terraform working environment, downloading the providers and configuring the backend state"
+  cmd: "terraform init"
+  workdir: "./terraform/main"
+
+- name: "Plan terraform"
+  description: "generate a execution plan showing the changes that will be applied to the infrastructure"
+  cmd: "terraform plan -var-file=\"fastdeploy.tfvars\" -out plan.out"
+  workdir: "./terraform/main"
+  templates:
+    - "fastdeploy.tfvars"
+
+- name: "Apply terraform"
+  description: "execute the changes defined in the plan to provision or modify the infrastructure"
+  cmd: "terraform apply 'plan.out'"
+  workdir: "./terraform/main"
+
+  outputs:
+    - name: "azure_resource_group_name"
+      description: "Return the name of the resource group created in Azure"
+      probe: azure_resource_group_name\s*=\s*"([^"]+)"
+
     - name: "azure_kubernetes_cluster_fqdn"
-      description: "Devuelve el FQDN del cluster AKS para usar como base del ingress_host"
+      description: "Return the FQDN of the AKS cluster to use as base of the ingress_host"
       probe: azure_kubernetes_cluster_fqdn\s*=\s*"([^"]+)"
 
     - name: "azure_kubernetes_cluster_name"
-      description: "Devuelve el FQDN del cluster AKS para usar como base del ingress_host"
+      description: "Return the FQDN of the AKS cluster to use as base of the ingress_host"
       probe: azure_kubernetes_cluster_name\s*=\s*"([^"]+)"
   
