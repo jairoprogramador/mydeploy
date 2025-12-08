@@ -138,15 +138,15 @@
   value: "5Gi"
 
 - name: "k8s_project_instance"
-  description: "nombre base de Kubernetes compuesto por el nombre, id y ambiente del proyecto"
+  description: "name base of Kubernetes composed by the project name, id and environment"
   value: ${var.project_name}${var.project_id}-${var.environment}
 
 - name: "k8s_namespace"
-  description: "namespace de Kubernetes compuesto por el nombre del proyecto y el equipo"
+  description: "namespace of Kubernetes composed by the project name and the team"
   value: ${var.k8s_project_instance}-${var.project_team}
 
 - name: "k8s_deployment_name"
-  description: "nombre del deployment de Kubernetes"
+  description: "name of the deployment of Kubernetes"
   value: ${var.k8s_project_instance}-${var.project_revision}
 
 - name: "k8s_ingress_host"
