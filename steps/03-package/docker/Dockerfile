@@ -11,8 +11,8 @@ WORKDIR /app
 
 USER appuser
 
-COPY pom.xml ./
-COPY src ./src
+COPY --chown=appuser:appgroup pom.xml ./
+COPY --chown=appuser:appgroup src ./src
 
 RUN mvn clean package -DskipTests=true
 
@@ -31,7 +31,7 @@ WORKDIR /app
 
 USER appuser
 
-COPY --from=builder /app/target/*.jar app.jar
+COPY --chown=appuser:appgroup --from=builder /app/target/*.jar app.jar
 
 ENV JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom -Xmx512m -Xms256m"
 

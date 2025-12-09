@@ -1,23 +1,8 @@
-- name: "Build Docker image"
-  description: "Build the Docker image with multiple tags: version, latest and revision."
-  cmd: "docker build -t ${var.azure_container_registry_login_server}/${var.project_name}:${var.project_revision} -t ${var.azure_container_registry_login_server}/${var.project_name}:latest -t ${var.project_name}:${var.project_revision} -f ${var.step_workdir}/docker/Dockerfile ${var.project_workdir}"
-   
 - name: "Login to Azure CLI"
   description: "Configure login to Azure CLI"
   cmd: "az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID"
 
-- name: "Login to ACR"
-  description: "Authenticate to Azure Container Registry reusing active session credentials"
-  cmd: "az acr login --name ${var.azure_container_registry_name}"
+- name: "Build and push Docker image to ACR"
+  description: "Build the Docker image directly in ACR with multiple tags: version and latest. This avoids Docker socket permission issues."
+  cmd: "az acr build --registry ${var.azure_container_registry_name} --image ${var.project_name}:${var.project_revision} --image ${var.project_name}:latest --file ${var.step_workdir}/docker/Dockerfile ${var.project_workdir}"
 
-- name: "Upload image to ACR (by version)"
-  description: "Upload the image with the version tag of the project to Azure Container Registry."
-  cmd: "docker push ${var.azure_container_registry_login_server}/${var.project_name}:${var.project_revision}"
-
-- name: "Upload image to ACR (latest)"
-  description: "Upload the image with the 'latest' tag to Azure Container Registry."
-  cmd: "docker push ${var.azure_container_registry_login_server}/${var.project_name}:latest"
-
-- name: "Clean local images"
-  description: "remove orphaned Docker images to optimize disk space usage"
-  cmd: "docker system prune -f"

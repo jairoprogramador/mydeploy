@@ -10,7 +10,7 @@
 
 - name: "Apply terraform shared"
   description: "execute the changes defined in the plan to provision or modify the shared resources"
-  cmd: "terraform apply 'plan.out'"
+  cmd: "terraform apply plan.out"
   workdir: "./terraform/shared"
 
   outputs:
@@ -40,7 +40,7 @@
 
 - name: "Apply terraform"
   description: "execute the changes defined in the plan to provision or modify the infrastructure"
-  cmd: "terraform apply 'plan.out'"
+  cmd: "terraform apply plan.out"
   workdir: "./terraform/main"
 
   outputs:
