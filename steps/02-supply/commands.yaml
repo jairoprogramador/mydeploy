@@ -12,7 +12,6 @@
   description: "execute the changes defined in the plan to provision or modify the shared resources"
   cmd: "terraform apply plan.out"
   workdir: "./terraform/shared"
-
   outputs:
     - name: "azure_container_registry_rg"
       description: "Return the name of the Resource Group for the Azure Container Registry (ACR)"
@@ -33,10 +32,10 @@
 
 - name: "Plan terraform"
   description: "generate a execution plan showing the changes that will be applied to the infrastructure"
-  cmd: "terraform plan -var-file=\"fastdeploy.tfvars\" -out plan.out"
+  cmd: "terraform plan -var-file=\"terraform.tfvars\" -out plan.out"
   workdir: "./terraform/main"
   templates:
-    - "fastdeploy.tfvars"
+    - "terraform.tfvars"
 
 - name: "Apply terraform"
   description: "execute the changes defined in the plan to provision or modify the infrastructure"
