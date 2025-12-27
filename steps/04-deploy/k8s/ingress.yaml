@@ -6,13 +6,13 @@ metadata:
   labels:
     app.kubernetes.io/name: ${var.project_name}
     app.kubernetes.io/instance: ${var.k8s_project_instance}
-    app.kubernetes.io/version: "${var.project_revision}"
+    app.kubernetes.io/version: ${var.project_revision}
     app.kubernetes.io/part-of: ${var.project_organization}
     app.kubernetes.io/managed-by: ${var.tool_name}
     environment: ${var.environment}
   annotations:
     # TLS/SSL Configuration
-    cert-manager.io/cluster-issuer: "${var.ingress_cluster_issuer}"
+    cert-manager.io/cluster-issuer: ${var.ingress_cluster_issuer}
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 
@@ -37,7 +37,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "${var.ingress_proxy_connect_timeout}"
     
     # Health checks y monitoring
-    nginx.ingress.kubernetes.io/upstream-vhost: "${var.k8s_ingress_host}"
+    nginx.ingress.kubernetes.io/upstream-vhost: ${var.k8s_ingress_host}
 spec:
   ingressClassName: ${var.ingress_class_name}
   tls:

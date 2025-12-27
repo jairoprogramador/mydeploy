@@ -19,7 +19,10 @@
   cmd: "kubectl apply -f ."
   workdir: "./k8s"
   templates:
-    - "./"
+    - "deployment.yaml"
+    - "ingress.yaml"
+    - "resourcequota.yaml"
+    - "service.yaml"
 
 - name: "Verify deployment"
   description: "verify that the deployment has completed successfully"
