@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: ${var.project_name}
     app.kubernetes.io/instance: ${var.k8s_project_instance}
-    app.kubernetes.io/version: "${var.project_revision}"
+    app.kubernetes.io/version: ${var.project_revision}
     app.kubernetes.io/part-of: ${var.project_organization}
     app.kubernetes.io/managed-by: ${var.tool_name}
     environment: ${var.environment}
@@ -38,11 +38,11 @@ spec:
         - containerPort: ${var.container_port}
         resources:
           requests:
-            memory: "${var.k8s_memory_request}"
-            cpu: "${var.k8s_cpu_request}"
+            memory: ${var.k8s_memory_request}
+            cpu: ${var.k8s_cpu_request}
           limits:
-            memory: "${var.k8s_memory_limit}"
-            cpu: "${var.k8s_cpu_limit}"
+            memory: ${var.k8s_memory_limit}
+            cpu: ${var.k8s_cpu_limit}
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
