@@ -10,6 +10,10 @@
   description: "Configure login with kubelogin"
   cmd: "kubelogin convert-kubeconfig -l azurecli"
 
+- name: "Wait for permissions propagation"
+  description: "wait a moment for Azure AD group membership to sync with the AKS cluster"
+  cmd: "sleep 30"
+
 - name: "Create Kubernetes namespace"
   description: "create the Kubernetes namespace if it does not exist"
   cmd: "kubectl create namespace ${var.k8s_namespace} --dry-run=client -o yaml | kubectl apply -f -"
