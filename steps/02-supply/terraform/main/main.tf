@@ -1,11 +1,11 @@
 resource "azurerm_resource_group" "main" {
-  name     = "${local.names.app_rm_resource_group}"
+  name     = "${local.names_rm.resource_group}"
   location = var.azure_location
   tags     = local.tags
 }
 
 resource "azuread_group" "main" {
-  display_name     = "${local.names.app_ad_group}"
+  display_name     = "${local.names_ad.user_group}"
   security_enabled = true
   members = [
     data.azuread_client_config.current.object_id
@@ -13,7 +13,7 @@ resource "azuread_group" "main" {
 }
 
 resource "azurerm_kubernetes_cluster" "main" {
-  name                = "${local.names.app_rm_kubernetes_cluster}"
+  name                = "${local.names_rm.kubernetes_cluster}"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   dns_prefix          = "${local.prefix.app_dns_prefix_aks}"
