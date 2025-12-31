@@ -98,7 +98,7 @@
 
 - name: "k8s_max_surge"
   description: "max surge pods during rolling update"
-  value: "1"
+  value: "0"
 
 - name: "k8s_min_ready_seconds"
   description: "minimum seconds a pod must be ready before considered available"
@@ -144,10 +144,6 @@
 - name: "k8s_namespace"
   description: "namespace of Kubernetes composed by the project name and the team"
   value: ${var.k8s_project_instance}-${var.project_team}
-
-- name: "k8s_deployment_name"
-  description: "name of the deployment of Kubernetes"
-  value: ${var.k8s_project_instance}-${var.project_revision}
 
 - name: "k8s_ingress_host"
   description: "host domain for the ingress (FQDN of the AKS cluster)"

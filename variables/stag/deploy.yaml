@@ -42,19 +42,19 @@
 # Deployment variables
 - name: "k8s_memory_request"
   description: "memory request for the kubernetes deployment"
-  value: "1Gi"
+  value: "512Mi"
 
 - name: "k8s_cpu_request"
   description: "cpu request for the kubernetes deployment"
-  value: "500m"
+  value: "250m"
 
 - name: "k8s_memory_limit"
   description: "memory limit for the kubernetes deployment"
-  value: "2Gi"
+  value: "1Gi"
 
 - name: "k8s_cpu_limit"
   description: "cpu limit for the kubernetes deployment"
-  value: "1"
+  value: "500m"
 
 - name: "k8s_replicas"
   description: "replicas for the kubernetes deployment"
@@ -144,10 +144,6 @@
 - name: "k8s_namespace"
   description: "namespace of Kubernetes composed by the project name and the team"
   value: ${var.k8s_project_instance}-${var.project_team}
-
-- name: "k8s_deployment_name"
-  description: "name of the deployment of Kubernetes"
-  value: ${var.k8s_project_instance}-${var.project_revision}
 
 - name: "k8s_ingress_host"
   description: "host domain for the ingress (FQDN of the AKS cluster)"

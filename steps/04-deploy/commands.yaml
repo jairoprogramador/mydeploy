@@ -10,10 +10,6 @@
   description: "Configure login with kubelogin"
   cmd: "kubelogin convert-kubeconfig -l azurecli"
 
-- name: "Wait for permissions propagation"
-  description: "wait a moment for Azure AD group membership to sync with the AKS cluster"
-  cmd: "sleep 30"
-
 - name: "Create Kubernetes namespace"
   description: "create the Kubernetes namespace if it does not exist"
   cmd: "kubectl create namespace ${var.k8s_namespace} --dry-run=client -o yaml | kubectl apply -f -"
@@ -30,7 +26,7 @@
 
 - name: "Verify deployment"
   description: "verify that the deployment has completed successfully"
-  cmd: "kubectl rollout status deployment/${var.k8s_deployment_name} --namespace ${var.k8s_namespace} --timeout=300s"
+  cmd: "kubectl rollout status deployment/${var.k8s_project_instance} --namespace ${var.k8s_namespace} --timeout=300s"
 
 - name: "Verify pods"
   description: "verify the status of the pods of the application"

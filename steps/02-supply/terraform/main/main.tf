@@ -42,15 +42,9 @@ resource "azurerm_kubernetes_cluster" "main" {
   tags = local.tags
 }
 
-resource "azurerm_role_assignment" "acr_push_permissions" {
-  scope                = data.azurerm_container_registry.main.id
-  role_definition_name = "AcrPush"
-  principal_id         = data.azuread_client_config.current.object_id
-}
-
-resource "azurerm_role_assignment" "acr_pull_permissions" {
-  scope                = data.azurerm_container_registry.main.id
-  role_definition_name = "AcrPull"
+resource "azurerm_role_assignment" "sp_aks_admin_role" {
+  scope                = azurerm_kubernetes_cluster.main.id
+  role_definition_name = "Azure Kubernetes Service Cluster Admin Role"
   principal_id         = data.azuread_client_config.current.object_id
 }
 

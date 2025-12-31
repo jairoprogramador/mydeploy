@@ -145,10 +145,6 @@
   description: "namespace of Kubernetes composed by the project name and the team"
   value: ${var.k8s_project_instance}-${var.project_team}
 
-- name: "k8s_deployment_name"
-  description: "name of the deployment of Kubernetes"
-  value: ${var.k8s_project_instance}-${var.project_revision}
-
 - name: "k8s_ingress_host"
   description: "host domain for the ingress (FQDN of the AKS cluster)"
   value: "${var.azure_kubernetes_cluster_fqdn}"
