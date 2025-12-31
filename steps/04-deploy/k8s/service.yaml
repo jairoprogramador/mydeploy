@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ${var.k8s_deployment_name}-service
+  name: ${var.k8s_project_instance}-service
   namespace: ${var.k8s_namespace}
   labels:
     app.kubernetes.io/name: ${var.project_name}

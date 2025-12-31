@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${var.k8s_deployment_name}
+  name: ${var.k8s_project_instance}
   namespace: ${var.k8s_namespace}
   labels:
     app.kubernetes.io/name: ${var.project_name}
@@ -32,8 +32,8 @@ spec:
         environment: ${var.environment}
     spec:
       containers:
-      - name: ${var.k8s_deployment_name}
-        image: ${var.azure_container_registry_login_server}/${var.project_name}:${var.project_revision}
+      - name: ${var.k8s_project_instance}
+        image: ${var.azure_container_registry_login_server}/${var.project_name}:${var.project_version}
         ports:
         - containerPort: ${var.container_port}
         resources:

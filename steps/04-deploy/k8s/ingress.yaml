@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ${var.k8s_deployment_name}-ingress
+  name: ${var.k8s_project_instance}-ingress
   namespace: ${var.k8s_namespace}
   labels:
     app.kubernetes.io/name: ${var.project_name}
@@ -43,7 +43,7 @@ spec:
   tls:
   - hosts:
     - ${var.k8s_ingress_host}
-    secretName: ${var.k8s_deployment_name}-tls
+    secretName: ${var.k8s_project_instance}-tls
   rules:
   - host: ${var.k8s_ingress_host}
     http:
@@ -52,6 +52,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: ${var.k8s_deployment_name}-service
+            name: ${var.k8s_project_instance}-service
             port:
               number: ${var.k8s_service_port}

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ResourceQuota
 metadata:
-  name: ${var.k8s_deployment_name}-quota
+  name: ${var.k8s_project_instance}-quota
   namespace: ${var.k8s_namespace}
   labels:
     app.kubernetes.io/name: ${var.project_name}
