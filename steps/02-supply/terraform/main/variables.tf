@@ -75,19 +75,19 @@ variable "azure_location" {
 variable "azure_resource_group_name" {
   description = "Define the name of the Azure resource group"
   type        = string
-  default     = "fdrgn"
+  default     = "vexrgn"
 }
 
 variable "azure_ad_group_name" {
   description = "Define the name of the Group in Azure Entra ID"
   type        = string
-  default     = "fdadg"
+  default     = "vexadg"
 }
 
 variable "azure_kubernetes_cluster_name" {
   description = "Define the name of the Azure Kubernetes Service (AKS) cluster"
   type        = string
-  default     = "fdkcn"
+  default     = "vexkcn"
 }
 
 variable "azure_kubernetes_cluster_node_count" {
@@ -109,7 +109,7 @@ variable "azure_kubernetes_cluster_vm_size" {
 variable "azure_dns_prefix_aks" {
   description = "Define the DNS prefix for the Azure Kubernetes Service cluster"
   type        = string
-  default     = "fddns"
+  default     = "vexdns"
   validation {
     condition     = can(regex("^[a-z0-9-]+$", var.azure_dns_prefix_aks))
     error_message = "The DNS prefix must contain only lowercase letters, numbers and hyphens."
